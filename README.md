@@ -40,13 +40,13 @@ const myStringBuilder = new MessageMap('The date is %month %day, %year. The curr
   .required('month')
   .required('day')
   .required('year')
-  .optional('epoch', () => String(new Date().getTime()));
+  .optional('epoch', () => String(new Date().getTime())); // We can choose to specify a default value for the optional key.
 
 console.log(myStringBuilder.toString({
   month: 'January',
   day: '1',
   year: '2000',
-  epoch: ... // Optional -- as indicated above. TypeScript will not complain if this parameter is missing.
+  epoch: ... // Optional -- as indicated above. TypeScript will not complain if this prop is missing.
 }));
 ```
 
