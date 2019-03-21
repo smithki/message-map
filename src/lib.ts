@@ -1,6 +1,10 @@
 // --- Types & constants ---------------------------------------------------- //
 
-export type Validator = (message: string | undefined) => boolean;
+/**
+ * Validates a string with custom logic. If a string is returned, that value is
+ * used as a fallback in case the substitution string is `undefined`.
+ */
+export type Validator = (message: string | undefined) => boolean | string;
 export type Substitution<T extends string> = RequiredSubstitution<T> | OptionalSubstitution<T>;
 export type RequiredSubstitution<T extends string> = { [P in T]: string | (() => string) };
 export type OptionalSubstitution<T extends string> = { [P in T]?: string | (() => string) };
@@ -82,7 +86,7 @@ export class MessageMap<TSubstitutions extends Substitution<any> | void = void> 
       const replacement = typeof replacer === 'function' ? replacer() : replacer;
 
       const isValid = validator(replacement);
-      if (!isValid) {
+      if (typeof isValid !== 'string' && !isValid) {
         const sub = `"%${name}"`;
         const msg = `"${this.message}"`;
         const received =
@@ -92,6 +96,8 @@ export class MessageMap<TSubstitutions extends Substitution<any> | void = void> 
 
       if (replacement) {
         result = result.replace(`%${name}`, replacement);
+      } else if (typeof isValid === 'string') {
+        result = result.replace(`%${name}`, isValid);
       }
     }
 
