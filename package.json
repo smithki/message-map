@@ -18,7 +18,7 @@
     "dist"
   ],
   "scripts": {
-    "dev": "npm-run-all -s clean:dist compile-watch:*",
+    "dev": "npm-run-all -s clean:dist compile_watch:*",
     "build": "npm-run-all -s clean:dist compile:*",
     "compile:cjs": "microbundle build src/index.cjs.ts --format cjs --external none",
     "compile:umd": "microbundle build src/index.umd.ts --format umd --name MessageMap --external none",
