@@ -4,7 +4,7 @@ export type Validator = (message: string | undefined) => boolean;
 export type Substitution<T extends string> = RequiredSubstitution<T> | OptionalSubstitution<T>;
 export type RequiredSubstitution<T extends string> = { [P in T]: string | (() => string) };
 export type OptionalSubstitution<T extends string> = { [P in T]?: string | (() => string) };
-export type ExpandedSubstitutions<T extends Substitution<any>, K extends Substitution<any> | void> = K extends void
+export type WidenSubstitutions<T extends Substitution<any>, K extends Substitution<any> | void> = K extends void
   ? T
   : T & K;
 
@@ -39,7 +39,7 @@ export class MessageMap<TSubstitutions extends Substitution<any> | void = void> 
   public optional<T extends string>(
     name: T,
     validator: Validator = () => true,
-  ): MessageMap<ExpandedSubstitutions<OptionalSubstitution<T>, TSubstitutions>> {
+  ): MessageMap<WidenSubstitutions<OptionalSubstitution<T>, TSubstitutions>> {
     const nextInst = new MessageMap(this.message);
     nextInst.substitutions = { ...this.substitutions };
     nextInst.substitutions[name] = validator;
@@ -56,7 +56,7 @@ export class MessageMap<TSubstitutions extends Substitution<any> | void = void> 
   public required<T extends string>(
     name: T,
     validator: Validator = message => typeof message !== 'undefined' && message !== null,
-  ): MessageMap<ExpandedSubstitutions<RequiredSubstitution<T>, TSubstitutions>> {
+  ): MessageMap<WidenSubstitutions<RequiredSubstitution<T>, TSubstitutions>> {
     const nextInst = new MessageMap(this.message);
     nextInst.substitutions = { ...this.substitutions };
     nextInst.substitutions[name] = validator;
@@ -71,7 +71,9 @@ export class MessageMap<TSubstitutions extends Substitution<any> | void = void> 
    * the `message` string.
    * @return The formed and validated string.
    */
-  public toString(substitutions: TSubstitutions): string {
+  public toString<T extends TSubstitutions>(
+    ...substitutions: T extends RequiredSubstitution<any> ? [TSubstitutions] : [TSubstitutions | void]
+  ): string {
     let result = this.message;
 
     for (const [name, validator] of Object.entries(this.substitutions)) {
