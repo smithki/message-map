@@ -32,7 +32,7 @@ export class MessageMap<TSubstitutions extends Substitution<any> | void = void> 
   /**
    * Registers an optional substitution.
    *
-   * @param name - The name to identify this substitution in the `message` string.
+   * @param name - The name by which to identify this substitution in the `message` string.
    * @param validator - An optional validation function to test replacement strings against.
    * @return A new instance of `MessageMap` with an expanded type signature.
    */
@@ -49,7 +49,7 @@ export class MessageMap<TSubstitutions extends Substitution<any> | void = void> 
   /**
    * Registers a required substitution.
    *
-   * @param name - The name to identify this substitution in the `message` string.
+   * @param name - The name by which to identify this substitution in the `message` string.
    * @param validator - An optional validation function to test replacement strings against.
    * @return A new instance of `MessageMap` with an expanded type signature.
    */
