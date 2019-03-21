@@ -1,6 +1,6 @@
 {
   "name": "message-map",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Dynamic string generation with a strongly-typed interface.",
   "author": {
     "name": "Ian K Smith",
