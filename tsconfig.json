@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "lib": ["es2018", "dom"],
+    "module": "esnext",
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "noImplicitThis": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "downlevelIteration": true,
+    "declaration": true,
+    "sourceMap": true,
+    "target": "es5",
+    "outDir": "./dist",
+    "skipLibCheck": true,
+    "typeRoots": ["node_modules/@0x/typescript-typings/types", "node_modules/@types"]
+  },
+  "include": [
+    "src/**/*",
+    "node_modules/@0x/typescript-typings/types/web3/index.d.ts"
+  ]
+}
+
