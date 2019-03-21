@@ -22,7 +22,7 @@
     "test-watch": "npm-run-all -s test:compile -p test-watch:*",
     "test-watch:compile": "tsc -w -p ./test/src",
     "test-watch:run": "chokidar \"./test/dist/**/*.spec.js\" -c \"npm run test:run\" --initial \"npm run test:run\"",
-    "test": "npm-run-all -s build clean:test-dist test:*",
+    "test": "npm-run-all -s clean:test-dist test:*",
     "test:compile": "tsc -p ./test",
     "test:run": "alsatian ./test/dist/**/*.spec.js",
     "prepublishOnly": "npm run build"

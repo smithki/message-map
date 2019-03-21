@@ -12,7 +12,7 @@ export class MessageMap<TSubstitutions extends Substitution<any> | unknown = unk
   private message: string;
 
   /** Configured substitutions. */
-  private substitutions: { [key: string]: Validator };
+  private substitutions: { [key: string]: Validator } = {};
 
   /**
    * Creates an instance of `MessageMap`, a strongly-typed interface for building dynamic strings. Your base `message`
@@ -24,7 +24,6 @@ export class MessageMap<TSubstitutions extends Substitution<any> | unknown = unk
    */
   constructor(message: string) {
     this.message = message;
-    this.substitutions = {};
   }
 
   /**
@@ -32,14 +31,16 @@ export class MessageMap<TSubstitutions extends Substitution<any> | unknown = unk
    *
    * @param name - The name to identify this substitution in the `message` string.
    * @param validator - An optional validation function to test replacement strings against.
-   * @return This same instance of `MessageMap` with an expanded type signature.
+   * @return A new instance of `MessageMap` with an expanded type signature.
    */
   public optional<T extends string>(
     name: T,
     validator: Validator = () => true,
   ): MessageMap<OptionalSubstitution<T> & TSubstitutions> {
-    this.substitutions[name] = validator;
-    return this as any;
+    const nextInst = new MessageMap(this.message);
+    nextInst.substitutions = { ...this.substitutions };
+    nextInst.substitutions[name] = validator;
+    return nextInst as any;
   }
 
   /**
@@ -47,14 +48,16 @@ export class MessageMap<TSubstitutions extends Substitution<any> | unknown = unk
    *
    * @param name - The name to identify this substitution in the `message` string.
    * @param validator - An optional validation function to test replacement strings against.
-   * @return This same instance of `MessageMap` with an expanded type signature.
+   * @return A new instance of `MessageMap` with an expanded type signature.
    */
   public required<T extends string>(
     name: T,
     validator: Validator = message => typeof message !== 'undefined' && message !== null,
   ): MessageMap<RequiredSubstitution<T> & TSubstitutions> {
-    this.substitutions[name] = validator;
-    return this as any;
+    const nextInst = new MessageMap(this.message);
+    nextInst.substitutions = { ...this.substitutions };
+    nextInst.substitutions[name] = validator;
+    return nextInst as any;
   }
 
   /**
