@@ -1,6 +1,6 @@
 {
   "name": "message-map",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Dynamic string generation with a strongly-typed interface.",
   "author": {
     "name": "Ian K Smith",
@@ -33,7 +33,7 @@
     "test-watch:run": "chokidar \"./test/dist/**/*.spec.js\" -c \"npm run test:run\" --initial \"npm run test:run\"",
     "test": "npm-run-all -s clean:test-dist test:*",
     "test:compile": "tsc -p ./test",
-    "test:run": "alsatian --tap ./test/dist/**/*.spec.js",
+    "test:run": "alsatian ./test/dist/**/*.spec.js",
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {
