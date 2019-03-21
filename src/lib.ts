@@ -1,13 +1,16 @@
-// --- Types ---------------------------------------------------------------- //
+// --- Types & constants ---------------------------------------------------- //
 
 export type Validator = (message: string | undefined) => boolean;
 export type Substitution<T extends string> = RequiredSubstitution<T> | OptionalSubstitution<T>;
 export type RequiredSubstitution<T extends string> = { [P in T]: string | (() => string) };
 export type OptionalSubstitution<T extends string> = { [P in T]?: string | (() => string) };
+export type ExpandedSubstitutions<T extends Substitution<any>, K extends Substitution<any> | void> = K extends void
+  ? T
+  : T & K;
 
 // --- MessageMap class ----------------------------------------------------- //
 
-export class MessageMap<TSubstitutions extends Substitution<any> | unknown = unknown> {
+export class MessageMap<TSubstitutions extends Substitution<any> | void = void> {
   /** The underlying base message string. */
   private message: string;
 
@@ -36,7 +39,7 @@ export class MessageMap<TSubstitutions extends Substitution<any> | unknown = unk
   public optional<T extends string>(
     name: T,
     validator: Validator = () => true,
-  ): MessageMap<OptionalSubstitution<T> & TSubstitutions> {
+  ): MessageMap<ExpandedSubstitutions<OptionalSubstitution<T>, TSubstitutions>> {
     const nextInst = new MessageMap(this.message);
     nextInst.substitutions = { ...this.substitutions };
     nextInst.substitutions[name] = validator;
@@ -53,7 +56,7 @@ export class MessageMap<TSubstitutions extends Substitution<any> | unknown = unk
   public required<T extends string>(
     name: T,
     validator: Validator = message => typeof message !== 'undefined' && message !== null,
-  ): MessageMap<RequiredSubstitution<T> & TSubstitutions> {
+  ): MessageMap<ExpandedSubstitutions<RequiredSubstitution<T>, TSubstitutions>> {
     const nextInst = new MessageMap(this.message);
     nextInst.substitutions = { ...this.substitutions };
     nextInst.substitutions[name] = validator;
