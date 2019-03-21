@@ -58,7 +58,7 @@ You can optionally provide `Validator` functions to the `MessageMap.required` an
 import { MessageMap } from 'message-map';
 
 const myStringBuilder = new MessageMap('My phone number is %phoneNumber')
-  .required('month', str => /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/.test(str));
+  .required('phoneNumber', str => /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/.test(str));
 
 console.log(myStringBuilder.toString({
   phoneNumber: '555-asdf-1234' // This will raise an error becuase the phone number won't pass validation!
