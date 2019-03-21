@@ -75,9 +75,10 @@ export class MessageMap<TSubstitutions extends Substitution<any> | void = void> 
     ...substitutions: T extends RequiredSubstitution<any> ? [TSubstitutions] : [TSubstitutions | void]
   ): string {
     let result = this.message;
+    const substitutionsQualified: any = !!substitutions.length ? substitutions[0] : {};
 
     for (const [name, validator] of Object.entries(this.substitutions)) {
-      const replacer = (substitutions as any)[0][name];
+      const replacer = substitutionsQualified[name];
       const replacement = typeof replacer === 'function' ? replacer() : replacer;
 
       const isValid = validator(replacement);
