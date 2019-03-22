@@ -94,10 +94,12 @@ export class MessageMap<TSubstitutions extends Substitution<any> | void = void> 
         throw new Error(`[MessageMap] Validation failed.\n\nSubstitution: ${sub} in ${msg}\nReceived: ${received}\n`);
       }
 
+      const re = new RegExp(`%${name}`, 'g');
+
       if (replacement) {
-        result = result.replace(`%${name}`, replacement);
+        result = result.replace(re, replacement);
       } else if (typeof isValid === 'string') {
-        result = result.replace(`%${name}`, isValid);
+        result = result.replace(re, isValid);
       }
     }
 
