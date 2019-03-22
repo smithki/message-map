@@ -14,6 +14,8 @@
 - Protect yourself from formatting bugs inside large/unwieldy template strings by maintaining type safety.
 - Probably a lot more I haven't considered yet!
 
+> _NOTE:_ This package uses modern TypeScript features to achieve type safety, `typescript@>=3.1` is recommended!
+
 ## 🔗 Installation
 
 Install via `yarn` (recommended):
