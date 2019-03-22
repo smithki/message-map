@@ -12,6 +12,7 @@
 - Centrally manage error messages for your JavaScript/TypeScript package.
 - Build a library of reactive translations for your front-end web application.
 - Protect yourself from formatting bugs inside large/unwieldy template strings by maintaining type safety.
+- Probably a lot more I haven't considered yet!
 
 ## 🔗 Installation
 
