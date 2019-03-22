@@ -52,7 +52,7 @@ console.log(myStringBuilder.toString({
 
 ### Using validator functions
 
-You can optionally provide `Validator` functions to the `MessageMap.required` and `MessageMap.optional` methods. These can return a `boolean` to indicate whether the interpolation should proceed or return a fallback `string` in the event the user-provided substitution is missing or `undefined` (this enables you to specify defaults for `MessageMap.optional` replacement keys—as shown in the above example for `epoch`).
+You can optionally provide [`Validator`](https://github.com/smithki/message-map/blob/f142965a4bf88da72a994cd48c846c062ee25426/src/lib.ts#L7) functions to `MessageMap.required` or `MessageMap.optional`. The callback returns `boolean` to indicate whether the interpolation should proceed at all **OR** a `string` fallback in case the user-provided substitution is missing or `undefined` (this enables you to specify defaults for `MessageMap.optional` replacement keys—as shown in the above example for `epoch`).
 
 ```ts
 import { MessageMap } from 'message-map';
@@ -61,6 +61,6 @@ const myStringBuilder = new MessageMap('My phone number is %phoneNumber')
   .required('phoneNumber', str => /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/.test(str));
 
 console.log(myStringBuilder.toString({
-  phoneNumber: '555-asdf-1234' // This will raise an error becuase the phone number won't pass validation!
+  phoneNumber: '555-asdf-1234' // This will raise an error because the phone number won't pass validation!
 }));
 ```
