@@ -7,7 +7,40 @@ import {
   MessageCollectionItemToMessageMap,
   MessageCollectionKeyedEnum,
   MessageCollectionKeys,
+  MessageCollectionSubstitution,
+  Validator,
 } from './types';
+
+// --- Utilities ------------------------------------------------------------ //
+
+/**
+ * Creates a generic `Validator` function for registering keys internally to
+ * `MessageCollection` instances.
+ *
+ * @param config - The substitutions configuration data
+ * @param fallback - A fallback `Validator` to use.
+ */
+function createValidator(config: string | MessageCollectionSubstitution | null, fallback: Validator): Validator {
+  return message => {
+    if (typeof config === 'string') return config;
+    if (config === null || !Object.keys(config).length) {
+      return fallback(message);
+    }
+
+    let proceed: string | boolean = true;
+
+    if (config.regex) {
+      const regex = typeof config.regex === 'string' ? new RegExp(config.regex, 'i') : new RegExp(config.regex);
+      proceed = regex.test(message!);
+    }
+
+    if (config.validator) {
+      proceed = config.validator(message);
+    }
+
+    return proceed || config.default || fallback(message);
+  };
+}
 
 // --- MessageCollection class ---------------------------------------------- //
 
@@ -66,48 +99,17 @@ export class MessageCollection<TCollection extends MessageCollectionDefinition |
     // Build required substitutions
     if (item.required) {
       for (const [k, config] of Object.entries(item.required)) {
-        mm = mm.required(k, message => {
-          if (typeof config === 'string') return config;
-          if (config === null || !Object.keys(config).length) {
-            return typeof message !== 'undefined' && message !== null;
-          }
-
-          let proceed: string | boolean = true;
-
-          if (config.regex) {
-            const regex = typeof config.regex === 'string' ? new RegExp(config.regex, 'i') : new RegExp(config.regex);
-            proceed = regex.test(message!);
-          }
-
-          if (config.validator) {
-            proceed = config.validator(message);
-          }
-
-          return proceed;
-        }) as any;
+        mm = mm.required(
+          k,
+          createValidator(config, message => typeof message !== 'undefined' && message !== null),
+        ) as any;
       }
     }
 
     // Build optional substitutions
     if (item.optional) {
       for (const [k, config] of Object.entries(item.optional)) {
-        mm = mm.optional(k, message => {
-          if (typeof config === 'string') return config;
-          if (config === null) return true;
-
-          let proceed: string | boolean = true;
-
-          if (config.regex) {
-            const regex = typeof config.regex === 'string' ? new RegExp(config.regex, 'i') : new RegExp(config.regex);
-            proceed = regex.test(message!);
-          }
-
-          if (config.validator) {
-            proceed = config.validator(message);
-          }
-
-          return proceed || config.default || true;
-        }) as any;
+        mm = mm.optional(k, createValidator(config, () => true)) as any;
       }
     }
 
@@ -116,18 +118,3 @@ export class MessageCollection<TCollection extends MessageCollectionDefinition |
     return mm as any;
   }
 }
-
-const bar = {
-  HELLO: {
-    message: 'hello %one %two',
-    optional: {
-      one: '',
-    },
-    required: {
-      two: '',
-    },
-  },
-};
-
-const z = new MessageCollection(bar);
-z.get(z.keys.HELLO).toString({ two: '' });
