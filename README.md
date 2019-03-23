@@ -70,7 +70,7 @@ console.log(myStringBuilder.toString({
 
 ### Using `MessageCollection`
 
-For large-scale use-cases, use the `MessageCollection` class, which can be configured via JSON-compatible objects.
+The `MessageCollection` class is intended for large-scale use-cases (such as building a language library) and is configurable via JSON-compatible objects. With TypeScript's `resolveJsonModule` option enabled, or by providing a static object literal, your `MessageCollection` can be strongly-typed, too!
 
 ```ts
 import * as languagelibrary from '../path/to/languageLibrary.json'; // Requires `resolveJsonModule` in tsconfig.json
@@ -84,17 +84,17 @@ const myLanguageLibrary = new MessageCollection(languageLibrary);
 ```ts
 {
   "HELLO_X": {
-    "message": "Good %partOfDay, %name",
+    "message": "Good %partOfDay, %name!",
     "optional": {
       "name": string | null | {
-        "default": string // Provide a fallback.
-        "regex": string // Validate input with a regex.
+        "default": string? // Provide a fallback.
+        "regex": string? // Validate input with a regex.
       }
     },
     "required": {
       "partOfDay": string | null | {
-        "default": string // Provide a fallback.
-        "regex": string // Validate input with a regex.
+        "default": string? // Provide a fallback.
+        "regex": string? // Validate input with a regex.
       }
     }
   },
@@ -109,8 +109,9 @@ which you can then use as a collection of static `MessageMap` instances:
 ```ts
 myLanguageLibrary.get('HELLO_X').toString({
   name: 'Bojack',
-  partOfDay: myLanguageLibrary.get('HELLO_X').toString(),
-})
+  partOfDay: myLanguageLibrary.get('MORNING').toString(),
+});
+// => "Good morning, Bojack!"
 ```
 
 For convenience, the `MessageCollection` class includes an enum of valid key names:
