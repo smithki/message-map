@@ -84,7 +84,7 @@ const myLanguageLibrary = new MessageCollection(languageLibrary);
 ```ts
 {
   "HELLO_X": {
-    "message": "Good %partOfDay, %name",
+    "message": "Good %partOfDay, %name!",
     "optional": {
       "name": string | null | {
         "default": string? // Provide a fallback.
@@ -111,6 +111,7 @@ myLanguageLibrary.get('HELLO_X').toString({
   name: 'Bojack',
   partOfDay: myLanguageLibrary.get('MORNING').toString(),
 })
+// => "Good morning, Bojack!"
 ```
 
 For convenience, the `MessageCollection` class includes an enum of valid key names:
