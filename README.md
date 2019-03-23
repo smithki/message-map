@@ -110,7 +110,7 @@ which you can then use as a collection of static `MessageMap` instances:
 myLanguageLibrary.get('HELLO_X').toString({
   name: 'Bojack',
   partOfDay: myLanguageLibrary.get('MORNING').toString(),
-})
+});
 // => "Good morning, Bojack!"
 ```
 
