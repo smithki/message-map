@@ -67,3 +67,55 @@ console.log(myStringBuilder.toString({
   phoneNumber: '555-asdf-1234' // This will raise an error because the phone number won't pass validation!
 }));
 ```
+
+### Using `MessageCollection`
+
+For large-scale use-cases, use the `MessageCollection` class, which can be configured via JSON-compatible objects.
+
+```ts
+import * as languagelibrary from '../path/to/languageLibrary.json'; // Requires `resolveJsonModule` in tsconfig.json
+import { MessageCollection } from 'message-map';
+
+const myLanguageLibrary = new MessageCollection(languageLibrary);
+```
+
+`languageLibrary.json` should look something like this:
+
+```ts
+{
+  "HELLO_X": {
+    "message": "Good %partOfDay, %name",
+    "optional": {
+      "name": string | null | {
+        "default": string // Provide a fallback.
+        "regex": string // Validate input with a regex.
+      }
+    },
+    "required": {
+      "partOfDay": string | null | {
+        "default": string // Provide a fallback.
+        "regex": string // Validate input with a regex.
+      }
+    }
+  },
+  "MORNING": {
+    "message": "morning",
+  },
+}
+```
+
+which you can then use as a collection of static `MessageMap` instances:
+
+```ts
+myLanguageLibrary.get('HELLO_X').toString({
+  name: 'Bojack',
+  partOfDay: myLanguageLibrary.get('HELLO_X').toString(),
+})
+```
+
+For convenience, the `MessageCollection` class includes an enum of valid key names:
+
+```ts
+myLanguageLibrary.keys.HELLO_X; // => "HELLO_X"
+myLanguageLibrary.keys.MORNING; // => "MORNING"
+```
