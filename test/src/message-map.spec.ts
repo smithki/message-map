@@ -1,7 +1,7 @@
 // --- Imports -------------------------------------------------------------- //
 
 import { Expect, SetupFixture, SpyOn, Test, TestFixture } from 'alsatian';
-import { MessageMap } from '../../src/lib';
+import { MessageMap } from '../../src/message-map';
 
 // -------------------------------------------------------------------------- //
 

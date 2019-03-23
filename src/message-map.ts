@@ -1,16 +1,6 @@
-// --- Types & constants ---------------------------------------------------- //
+// --- Imports -------------------------------------------------------------- //
 
-/**
- * Validates a string with custom logic. If a string is returned, that value is
- * used as a fallback in case the substitution string is `undefined`.
- */
-export type Validator = (message: string | undefined) => boolean | string;
-export type Substitution<T extends string> = RequiredSubstitution<T> | OptionalSubstitution<T>;
-export type RequiredSubstitution<T extends string> = { [P in T]: string | (() => string) };
-export type OptionalSubstitution<T extends string> = { [P in T]?: string | (() => string) };
-export type WidenSubstitutions<T extends Substitution<any>, K extends Substitution<any> | void> = K extends void
-  ? T
-  : T & K;
+import { OptionalSubstitution, RequiredSubstitution, Substitution, Validator, WidenSubstitutions } from './types';
 
 // --- MessageMap class ----------------------------------------------------- //
 
