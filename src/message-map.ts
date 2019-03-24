@@ -5,8 +5,12 @@ import { GetSubstitutionKeys, OptionalSubstitution, RequiredSubstitution, Valida
 // --- MessageMap class ----------------------------------------------------- //
 
 export class MessageMap<
-  TRequiredSubstitutions extends RequiredSubstitution<any> = RequiredSubstitution<never>,
-  TOptionalSubstitutions extends OptionalSubstitution<any> = OptionalSubstitution<never>
+  TRequiredSubstitutions extends RequiredSubstitution<string> | RequiredSubstitution<never> = RequiredSubstitution<
+    never
+  >,
+  TOptionalSubstitutions extends OptionalSubstitution<string> | OptionalSubstitution<never> = OptionalSubstitution<
+    never
+  >
 > {
   /** The underlying base message string. */
   private message: string;

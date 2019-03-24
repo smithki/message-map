@@ -8,8 +8,8 @@ import { MessageMap } from './message-map';
  */
 export type Validator = (message: string | undefined) => boolean | string;
 export type Substitution<T extends string> = RequiredSubstitution<T> | OptionalSubstitution<T>;
-export type RequiredSubstitution<T extends string> = { [P in T]: string | (() => string) };
-export type OptionalSubstitution<T extends string> = { [P in T]?: string | (() => string) };
+export type RequiredSubstitution<T extends string | never> = { [P in T]: string | (() => string) };
+export type OptionalSubstitution<T extends string | never> = { [P in T]?: string | (() => string) };
 /** Gets a union of keys from the given `Substitution` type. */
 export type GetSubstitutionKeys<T extends Substitution<any>> = T extends Substitution<infer K> ? K : never;
 
