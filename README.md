@@ -87,14 +87,14 @@ const myLanguageLibrary = new MessageCollection(languageLibrary);
   "HELLO_X": {
     "message": "Good %partOfDay, %yourName!",
     "optional": {
-      "yourName": string | null | {
+      "yourName": string /* as a fallback */ | null | {
         "default": string? // Provide a fallback.
         "regex": string? // Validate input with a regex.
       },
       ... // Any number of optional keys may be listed here.
     },
     "required": {
-      "partOfDay": string | null | {
+      "partOfDay": string /* as a fallback */ | null | {
         "default": string? // Provide a fallback.
         "regex": string? // Validate input with a regex.
       },
