@@ -45,12 +45,13 @@ const myStringBuilder = new MessageMap('The date is %month %day, %year. The curr
   .required('year')
   .optional('epoch', () => String(new Date().getTime())); // We can choose to specify a default value for the optional key.
 
-console.log(myStringBuilder.toString({
+myStringBuilder.toString({
   month: 'January',
   day: '1',
   year: '2000',
   epoch: ... // Optional -- as indicated above. TypeScript will not complain if this prop is missing.
-}));
+});
+// => "The date is January 1, 2000. The current epoch is 946684800."
 ```
 
 ### Using validator functions
