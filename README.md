@@ -106,7 +106,7 @@ const myLanguageLibrary = new MessageCollection(languageLibrary);
 }
 ```
 
-which you can then use as a collection of static `MessageMap` instances:
+You can then use `myLanguageLibrary` as a collection of static `MessageMap` instances:
 
 ```ts
 myLanguageLibrary.get('HELLO_X').toString({
