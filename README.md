@@ -55,7 +55,7 @@ console.log(myStringBuilder.toString({
 
 ### Using validator functions
 
-You can optionally provide [`Validator`](https://github.com/smithki/message-map/blob/f142965a4bf88da72a994cd48c846c062ee25426/src/lib.ts#L7) functions to `MessageMap.required` or `MessageMap.optional`. The callback returns `boolean` to indicate whether the interpolation should proceed at all **OR** a `string` fallback in case the user-provided substitution is missing or `undefined` (this enables you to specify defaults for `MessageMap.optional` replacement keys—as shown in the above example for `epoch`).
+You can optionally provide [`Validator`](https://github.com/smithki/message-map/blob/f142965a4bf88da72a994cd48c846c062ee25426/src/lib.ts#L7) functions to `MessageMap.required` or `MessageMap.optional`. The callback returns a `boolean` to indicate whether the interpolation should proceed at all **OR** a `string` fallback in case the user-provided substitution is missing or `undefined` (this enables you to specify defaults for `MessageMap.optional` replacement keys—as shown in the above example for `epoch`).
 
 ```ts
 import { MessageMap } from 'message-map';
@@ -84,18 +84,20 @@ const myLanguageLibrary = new MessageCollection(languageLibrary);
 ```ts
 {
   "HELLO_X": {
-    "message": "Good %partOfDay, %name!",
+    "message": "Good %partOfDay, %yourName!",
     "optional": {
-      "name": string | null | {
+      "yourName": string | null | {
         "default": string? // Provide a fallback.
         "regex": string? // Validate input with a regex.
-      }
+      },
+      ... // Any number of optional keys may be listed here.
     },
     "required": {
       "partOfDay": string | null | {
         "default": string? // Provide a fallback.
         "regex": string? // Validate input with a regex.
-      }
+      },
+      ... // Any number of required keys may be listed here.
     }
   },
   "MORNING": {
