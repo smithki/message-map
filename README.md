@@ -7,7 +7,7 @@
 
 ## 💁🏼‍♂️ Introduction
 
-`MessageMap` is a glorified version of `String.prototype.replace` that applies TypeScript static typing to the concept of [C-style string interpolation](http://www.cplusplus.com/reference/cstdio/printf/). Some potential use-cases include:
+`MessageMap` is an extra spicy version of `String.prototype.replace` that applies TypeScript static typing to the concept of [C-style string interpolation](http://www.cplusplus.com/reference/cstdio/printf/). Some potential use-cases include:
 
 - Centrally manage error messages for your JavaScript/TypeScript package.
 - Build a library of reactive translations for your front-end web application.
