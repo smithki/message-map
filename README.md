@@ -121,4 +121,5 @@ For convenience, the `MessageCollection` class includes an enum of valid key nam
 ```ts
 myLanguageLibrary.keys.HELLO_X; // => "HELLO_X"
 myLanguageLibrary.keys.MORNING; // => "MORNING"
+keyof typeof myLanguageLibrary.keys; // => "HELLO_X" | "MORNING"
 ```
