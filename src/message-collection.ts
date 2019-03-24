@@ -19,6 +19,7 @@ import {
  *
  * @param config - The substitutions configuration data
  * @param fallback - A fallback `Validator` to use.
+ * @return A `Validator` object.
  */
 function createValidator(config: string | MessageCollectionSubstitution | null, fallback: Validator): Validator {
   return message => {
@@ -69,7 +70,7 @@ export class MessageCollection<TCollection extends MessageCollectionDefinition =
    * `MessageMap(s)` in return.
    *
    * @param collection - A plain object implementing `MessageCollectionDefinition`.
-   * @return An instance of `MessageMap`
+   * @return An instance of `MessageCollection`
    */
   constructor(collection: Exclude<TCollection, void>) {
     this.collection = collection;
@@ -85,11 +86,12 @@ export class MessageCollection<TCollection extends MessageCollectionDefinition =
    * Gets a `MessageMap` instance from the given `key`.
    *
    * @param key - A key name to idenfity the desired `MessageMap` in this collection.
+   * @return An instance of `MessageMap`.
    */
   public get<TKey extends MessageCollectionKeys<Exclude<TCollection, void>>>(
     key: TKey,
   ): MessageCollectionItemToMessageMap<Exclude<TCollection, void>, TKey> {
-    // Check if we already build a `MessageMap` instance for the given `key`.
+    // Check if we already built a `MessageMap` instance for the given `key`.
     if (this.messageMaps[key]) return this.messageMaps[key] as any;
 
     // Data shortcuts
