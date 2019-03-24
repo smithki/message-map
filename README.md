@@ -110,7 +110,7 @@ You can then use `myLanguageLibrary` as a collection of static `MessageMap` inst
 
 ```ts
 myLanguageLibrary.get('HELLO_X').toString({
-  name: 'Bojack',
+  yourName: 'Bojack',
   partOfDay: myLanguageLibrary.get('MORNING').toString(),
 });
 // => "Good morning, Bojack!"
