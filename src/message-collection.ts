@@ -44,7 +44,7 @@ function createValidator(config: string | MessageCollectionSubstitution | null, 
 
 // --- MessageCollection class ---------------------------------------------- //
 
-export class MessageCollection<TCollection extends MessageCollectionDefinition | void = void> {
+export class MessageCollection<TCollection extends MessageCollectionDefinition = MessageCollectionDefinition> {
   /** The underlying collection definition. */
   private collection: Exclude<TCollection, void>;
 
@@ -94,27 +94,24 @@ export class MessageCollection<TCollection extends MessageCollectionDefinition |
 
     // Data shortcuts
     const item = this.collection[key] as MessageCollectionItem;
-    let mm = new MessageMap(item.message);
+    let mm: MessageMap<any> = new MessageMap(item.message);
 
     // Build required substitutions
     if (item.required) {
       for (const [k, config] of Object.entries(item.required)) {
-        mm = mm.required(
-          k,
-          createValidator(config, message => typeof message !== 'undefined' && message !== null),
-        ) as any;
+        mm = mm.required(k, createValidator(config, message => typeof message !== 'undefined' && message !== null));
       }
     }
 
     // Build optional substitutions
     if (item.optional) {
       for (const [k, config] of Object.entries(item.optional)) {
-        mm = mm.optional(k, createValidator(config, () => true)) as any;
+        mm = mm.optional(k, createValidator(config, () => true));
       }
     }
 
     // Cache the newly created `MessageMap` and return it.
-    this.messageMaps[key] = mm as any;
-    return mm as any;
+    this.messageMaps[key] = mm;
+    return mm;
   }
 }

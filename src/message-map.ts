@@ -1,10 +1,13 @@
 // --- Imports -------------------------------------------------------------- //
 
-import { OptionalSubstitution, RequiredSubstitution, Substitution, Validator, WidenSubstitutions } from './types';
+import { GetSubstitutionKeys, OptionalSubstitution, RequiredSubstitution, Validator } from './types';
 
 // --- MessageMap class ----------------------------------------------------- //
 
-export class MessageMap<TSubstitutions extends Substitution<any> | void = void> {
+export class MessageMap<
+  TRequiredSubstitutions extends RequiredSubstitution<any> = RequiredSubstitution<never>,
+  TOptionalSubstitutions extends OptionalSubstitution<any> = OptionalSubstitution<never>
+> {
   /** The underlying base message string. */
   private message: string;
 
@@ -33,7 +36,10 @@ export class MessageMap<TSubstitutions extends Substitution<any> | void = void> 
   public optional<T extends string>(
     name: T,
     validator: Validator = () => true,
-  ): MessageMap<WidenSubstitutions<OptionalSubstitution<T>, TSubstitutions>> {
+  ): MessageMap<
+    RequiredSubstitution<GetSubstitutionKeys<TRequiredSubstitutions>>,
+    OptionalSubstitution<GetSubstitutionKeys<TOptionalSubstitutions> | T>
+  > {
     const nextInst = new MessageMap(this.message);
     nextInst.substitutions = { ...this.substitutions };
     nextInst.substitutions[name] = validator;
@@ -50,7 +56,10 @@ export class MessageMap<TSubstitutions extends Substitution<any> | void = void> 
   public required<T extends string>(
     name: T,
     validator: Validator = message => typeof message !== 'undefined' && message !== null,
-  ): MessageMap<WidenSubstitutions<RequiredSubstitution<T>, TSubstitutions>> {
+  ): MessageMap<
+    RequiredSubstitution<GetSubstitutionKeys<TRequiredSubstitutions> | T>,
+    OptionalSubstitution<GetSubstitutionKeys<TOptionalSubstitutions>>
+  > {
     const nextInst = new MessageMap(this.message);
     nextInst.substitutions = { ...this.substitutions };
     nextInst.substitutions[name] = validator;
@@ -65,8 +74,10 @@ export class MessageMap<TSubstitutions extends Substitution<any> | void = void> 
    * the `message` string.
    * @return The formed and validated string.
    */
-  public toString<T extends TSubstitutions>(
-    ...substitutions: T extends RequiredSubstitution<any> ? [TSubstitutions] : [TSubstitutions | void]
+  public toString<T extends TRequiredSubstitutions & TOptionalSubstitutions>(
+    ...substitutions: T extends RequiredSubstitution<any>
+      ? [(TRequiredSubstitutions & TOptionalSubstitutions)]
+      : [(TRequiredSubstitutions & TOptionalSubstitutions) | void]
   ): string {
     let result = this.message;
     const substitutionsQualified: any = !!substitutions.length ? substitutions[0] : {};

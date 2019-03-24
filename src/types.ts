@@ -10,9 +10,8 @@ export type Validator = (message: string | undefined) => boolean | string;
 export type Substitution<T extends string> = RequiredSubstitution<T> | OptionalSubstitution<T>;
 export type RequiredSubstitution<T extends string> = { [P in T]: string | (() => string) };
 export type OptionalSubstitution<T extends string> = { [P in T]?: string | (() => string) };
-export type WidenSubstitutions<T extends Substitution<any>, K extends Substitution<any> | void> = K extends void
-  ? T
-  : T & K;
+/** Gets a union of keys from the given `Substitution` type. */
+export type GetSubstitutionKeys<T extends Substitution<any>> = T extends Substitution<infer K> ? K : never;
 
 // --- MessageCollection types ---------------------------------------------- //
 
@@ -47,10 +46,6 @@ export type MessageCollectionItemToMessageMap<
   TCollection extends MessageCollectionDefinition,
   TKey extends MessageCollectionKeys<TCollection>
 > = MessageMap<
-  UnionToIntersection<OptionalSubstitution<Exclude<keyof TCollection[TKey]['optional'], symbol | number>>> &
-    UnionToIntersection<RequiredSubstitution<Exclude<keyof TCollection[TKey]['required'], symbol | number>>>
+  RequiredSubstitution<Exclude<keyof TCollection[TKey]['required'], symbol | number>>,
+  OptionalSubstitution<Exclude<keyof TCollection[TKey]['optional'], symbol | number>>
 >;
-
-// --- Utility types -------------------------------------------------------- //
-
-type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never;
