@@ -64,9 +64,9 @@ import { MessageMap } from 'message-map';
 const myStringBuilder = new MessageMap('My phone number is %phoneNumber')
   .required('phoneNumber', str => /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/.test(str));
 
-console.log(myStringBuilder.toString({
+myStringBuilder.toString({
   phoneNumber: '555-asdf-1234' // This will raise an error because the phone number won't pass validation!
-}));
+});
 ```
 
 ### Using `MessageCollection`
@@ -101,9 +101,7 @@ const myLanguageLibrary = new MessageCollection(languageLibrary);
       ... // Any number of required keys may be listed here.
     }
   },
-  "MORNING": {
-    "message": "morning",
-  },
+  "MORNING": "morning" // A string in lieu of configuration simply means no substitutions!
 }
 ```
 

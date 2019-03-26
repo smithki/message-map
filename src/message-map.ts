@@ -81,6 +81,8 @@ export class MessageMap<
   public toString<T extends TRequiredSubstitutions & TOptionalSubstitutions>(
     ...substitutions: T extends RequiredSubstitution<any>
       ? [(TRequiredSubstitutions & TOptionalSubstitutions)]
+      : GetSubstitutionKeys<TOptionalSubstitutions> extends never
+      ? [void]
       : [(TRequiredSubstitutions & TOptionalSubstitutions) | void]
   ): string {
     let result = this.message;

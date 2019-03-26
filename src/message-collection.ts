@@ -90,30 +90,32 @@ export class MessageCollection<TCollection extends MessageCollectionDefinition =
    */
   public get<TKey extends MessageCollectionKeys<Exclude<TCollection, void>>>(
     key: TKey,
-  ): MessageCollectionItemToMessageMap<Exclude<TCollection, void>, TKey> {
+  ): MessageCollectionItemToMessageMap<Exclude<TCollection, void>[TKey]> {
     // Check if we already built a `MessageMap` instance for the given `key`.
     if (this.messageMaps[key]) return this.messageMaps[key] as any;
 
     // Data shortcuts
     const item = this.collection[key] as MessageCollectionItem;
-    let mm: MessageMap<any> = new MessageMap(item.message);
+    let mm: MessageMap<any, any> = new MessageMap(typeof item === 'string' ? item : item.message);
 
-    // Build required substitutions
-    if (item.required) {
-      for (const [k, config] of Object.entries(item.required)) {
-        mm = mm.required(k, createValidator(config, message => typeof message !== 'undefined' && message !== null));
+    if (typeof item !== 'string') {
+      // Build required substitutions
+      if (item.required) {
+        for (const [k, config] of Object.entries(item.required)) {
+          mm = mm.required(k, createValidator(config, message => typeof message !== 'undefined' && message !== null));
+        }
       }
-    }
 
-    // Build optional substitutions
-    if (item.optional) {
-      for (const [k, config] of Object.entries(item.optional)) {
-        mm = mm.optional(k, createValidator(config, () => true));
+      // Build optional substitutions
+      if (item.optional) {
+        for (const [k, config] of Object.entries(item.optional)) {
+          mm = mm.optional(k, createValidator(config, () => true));
+        }
       }
     }
 
     // Cache the newly created `MessageMap` and return it.
     this.messageMaps[key] = mm;
-    return mm;
+    return mm as any;
   }
 }
