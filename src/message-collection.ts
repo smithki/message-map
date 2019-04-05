@@ -50,7 +50,11 @@ export class MessageCollection<TCollection extends MessageCollectionDefinition =
   private collection: Exclude<TCollection, void>;
 
   /** The underlying `MessageMap` instances. These are lazily populated and cached. */
-  private messageMaps: { [P in MessageCollectionKeys<Exclude<TCollection, void>>]: MessageMap } = {} as any;
+  public messages: {
+    [P in MessageCollectionKeys<Exclude<TCollection, void>>]: MessageCollectionItemToMessageMap<
+      Exclude<TCollection, void>[P]
+    >
+  } = {} as any;
 
   /**
    * An enum of keys that identify `MessageMap` instances stored in this
@@ -92,7 +96,7 @@ export class MessageCollection<TCollection extends MessageCollectionDefinition =
     key: TKey,
   ): MessageCollectionItemToMessageMap<Exclude<TCollection, void>[TKey]> {
     // Check if we already built a `MessageMap` instance for the given `key`.
-    if (this.messageMaps[key]) return this.messageMaps[key] as any;
+    if (this.messages[key]) return this.messages[key] as any;
 
     // Data shortcuts
     const item = this.collection[key] as MessageCollectionItem;
@@ -115,7 +119,7 @@ export class MessageCollection<TCollection extends MessageCollectionDefinition =
     }
 
     // Cache the newly created `MessageMap` and return it.
-    this.messageMaps[key] = mm;
+    this.messages[key] = mm as any;
     return mm as any;
   }
 }
