@@ -13,7 +13,7 @@ export class MessageMap<
   >
 > {
   /** The underlying base message string. */
-  private message: string;
+  private template: string;
 
   /** Configured substitutions. */
   private substitutions: { [key: string]: Validator } = {};
@@ -23,11 +23,11 @@ export class MessageMap<
    * may contain substrings like: `"%name"`, which is replaced by a substitution keyed as `name`. So `"Hello, %name!"`
    * might form into `"Hello, Nancy!"` or `"Hello, George!"`.
    *
-   * @param message - The base message.
+   * @param template - The base message.
    * @return An instance of `MessageMap`
    */
-  constructor(message: string) {
-    this.message = message;
+  constructor(template: string) {
+    this.template = template;
   }
 
   /**
@@ -44,7 +44,7 @@ export class MessageMap<
     RequiredSubstitution<GetSubstitutionKeys<TRequiredSubstitutions>>,
     OptionalSubstitution<GetSubstitutionKeys<TOptionalSubstitutions> | T>
   > {
-    const nextInst = new MessageMap(this.message);
+    const nextInst = new MessageMap(this.template);
     nextInst.substitutions = { ...this.substitutions };
     nextInst.substitutions[name] = validator;
     return nextInst as any;
@@ -64,7 +64,7 @@ export class MessageMap<
     RequiredSubstitution<GetSubstitutionKeys<TRequiredSubstitutions> | T>,
     OptionalSubstitution<GetSubstitutionKeys<TOptionalSubstitutions>>
   > {
-    const nextInst = new MessageMap(this.message);
+    const nextInst = new MessageMap(this.template);
     nextInst.substitutions = { ...this.substitutions };
     nextInst.substitutions[name] = validator;
     return nextInst as any;
@@ -85,7 +85,7 @@ export class MessageMap<
       ? [void]
       : [(TRequiredSubstitutions & TOptionalSubstitutions) | void]
   ): string {
-    let result = this.message;
+    let result = this.template;
     const substitutionsQualified: any = !!substitutions.length ? substitutions[0] : {};
 
     for (const [name, validator] of Object.entries(this.substitutions)) {
@@ -95,7 +95,7 @@ export class MessageMap<
       const isValid = validator(replacement);
       if (typeof isValid !== 'string' && !isValid) {
         const sub = `"%${name}"`;
-        const msg = `"${this.message}"`;
+        const msg = `"${this.template}"`;
         const received =
           typeof replacement === 'undefined' || replacement === null ? String(replacement) : `"${replacement}"`;
         throw new Error(`[MessageMap] Validation failed.\n\nSubstitution: ${sub} in ${msg}\nReceived: ${received}\n`);

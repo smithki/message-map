@@ -50,7 +50,7 @@ export class MessageCollection<TCollection extends MessageCollectionDefinition =
   private collection: Exclude<TCollection, void>;
 
   /** The underlying `MessageMap` instances. These are lazily populated and cached. */
-  public messages: {
+  public messageMaps: {
     [P in MessageCollectionKeys<Exclude<TCollection, void>>]: MessageCollectionItemToMessageMap<
       Exclude<TCollection, void>[P]
     >
@@ -96,11 +96,11 @@ export class MessageCollection<TCollection extends MessageCollectionDefinition =
     key: TKey,
   ): MessageCollectionItemToMessageMap<Exclude<TCollection, void>[TKey]> {
     // Check if we already built a `MessageMap` instance for the given `key`.
-    if (this.messages[key]) return this.messages[key] as any;
+    if (this.messageMaps[key]) return this.messageMaps[key] as any;
 
     // Data shortcuts
     const item = this.collection[key] as MessageCollectionItem;
-    let mm: MessageMap<any, any> = new MessageMap(typeof item === 'string' ? item : item.message);
+    let mm: MessageMap<any, any> = new MessageMap(typeof item === 'string' ? item : item.template);
 
     if (typeof item !== 'string') {
       // Build required substitutions
@@ -119,7 +119,7 @@ export class MessageCollection<TCollection extends MessageCollectionDefinition =
     }
 
     // Cache the newly created `MessageMap` and return it.
-    this.messages[key] = mm as any;
+    this.messageMaps[key] = mm as any;
     return mm as any;
   }
 }

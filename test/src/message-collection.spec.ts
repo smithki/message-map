@@ -13,7 +13,7 @@ const baz = 'baz';
 
 const definition = {
   HELLO: {
-    message: base,
+    template: base,
     optional: {
       one: null,
     },
@@ -23,12 +23,12 @@ const definition = {
   },
 
   HAS_VALIDATOR: {
-    message: base,
+    template: base,
     optional: { one: { validator: () => qwerty } },
   },
 
   HAS_REGEX: {
-    message: base,
+    template: base,
     required: { one: { regex: '^qwe' } },
   },
 

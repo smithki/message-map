@@ -25,7 +25,7 @@ export interface MessageCollectionSubstitution {
 export type MessageCollectionItem =
   | string
   | {
-      message: string;
+      template: string;
       optional?: {
         [key: string]: string | MessageCollectionSubstitution | null;
       };
