@@ -85,7 +85,7 @@ const myLanguageLibrary = new MessageCollection(languageLibrary);
 ```ts
 {
   "HELLO_X": {
-    "message": "Good %partOfDay, %yourName!",
+    "template": "Good %partOfDay, %yourName!",
     "optional": {
       "yourName": string /* as a fallback */ | null | {
         "default": string? // Provide a fallback.
@@ -121,4 +121,21 @@ For convenience, the `MessageCollection` class includes an enum of valid key nam
 myLanguageLibrary.keys.HELLO_X; // => "HELLO_X"
 myLanguageLibrary.keys.MORNING; // => "MORNING"
 keyof typeof myLanguageLibrary.keys; // => "HELLO_X" | "MORNING"
+```
+
+The underlying `MessageMap` instances are exposed on `MessageCollection.messages`, but note they are **lazily populated** by `MessageCollection.get(...)`. The `MessageCollection.messages` property is exposed primarily for TypeScript typing needs:
+
+```ts
+myLanguageLibrary.messageMaps
+// => {
+//      "HELLO_X"?: MessageMap,
+//      "MORNING"?: MessageMap,
+//    }
+```
+
+Then you can trivially extract the substitution parameters like so:
+
+```ts
+type MySubstitutionKeys = keyof typeof myLanguageLibrary['keys'];
+type MySubstitutionConfig<TKey extends MySubstitutionKeys> = Parameters<typeof myLanguageLibrary['messages'][TKey]['toString']>;
 ```
