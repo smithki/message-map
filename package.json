@@ -1,6 +1,6 @@
 {
   "name": "message-map",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Dynamic string generation with a strongly-typed interface.",
   "author": {
     "name": "Ian K Smith",
@@ -34,7 +34,7 @@
     "test": "npm-run-all -s clean:test-dist test:*",
     "test:compile": "tsc -p ./test",
     "test:run": "alsatian ./test/dist/**/*.spec.js",
-    "prepublishOnly": "npm run build"
+    "lint": "tslint --project ."
   },
   "devDependencies": {
     "@ikscodes/tslint-config": "^5.0.0",
