@@ -88,14 +88,14 @@ interface JsonLanguageLibrary {
     template: string;
 
     optional?: {
-      [substitution: string]: string | {
+      [substitution: string]: string | null | {
         default?: string;
         regex?: string;
       };
     };
 
     required?: {
-      [substitution: string]: string | {
+      [substitution: string]: string | null | {
         default?: string;
         regex?: string;
       };
