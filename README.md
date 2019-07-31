@@ -80,28 +80,48 @@ import { MessageCollection } from 'message-map';
 const myLanguageLibrary = new MessageCollection(languageLibrary);
 ```
 
-`languageLibrary.json` should look something like this:
+`languageLibrary.json` has the following type signature:
 
 ```ts
+interface JsonLanguageLibrary {
+  [key: string]: string | {
+    template: string;
+
+    optional?: {
+      [substitution: string]: string | null | {
+        default?: string;
+        regex?: string;
+      };
+    };
+
+    required?: {
+      [substitution: string]: string | null | {
+        default?: string;
+        regex?: string;
+      };
+    };
+  };
+}
+```
+
+Here's some example JSON:
+
+```json
 {
   "HELLO_X": {
     "template": "Good %partOfDay, %yourName!",
     "optional": {
-      "yourName": string /* as a fallback */ | null | {
-        "default": string? // Provide a fallback.
-        "regex": string? // Validate input with a regex.
-      },
-      ... // Any number of optional keys may be listed here.
+      "yourName": {
+        "default": "Jeeves"
+      }
     },
     "required": {
-      "partOfDay": string /* as a fallback */ | null | {
-        "default": string? // Provide a fallback.
-        "regex": string? // Validate input with a regex.
-      },
-      ... // Any number of required keys may be listed here.
+      "partOfDay": {
+        "regex": "//(morning|afternoon|evening)//"
+      }
     }
   },
-  "MORNING": "morning" // A string in lieu of configuration simply means no substitutions!
+  "MORNING": "morning"
 }
 ```
 
