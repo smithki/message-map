@@ -6,6 +6,7 @@
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "noImplicitThis": true,
+    "resolveJsonModule": true,
     "strict": true,
     "esModuleInterop": true,
     "downlevelIteration": true,

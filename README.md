@@ -165,7 +165,7 @@ type MySubstitutionConfig<TKey extends MySubstitutionKeys> = Parameters<typeof m
 A [UMD](https://github.com/umdjs/umd) build of `MessageMap` is available via [UNPKG](https://unpkg.com/message-map@0.6.0/dist/index.umd.js). Drop it into your page via a `<script>` tag:
 
 ```html
-<script type="text/javascript" src="https://unpkg.com/message-map@0.6.0/dist/index.umd.js"></script>
+<script type="text/javascript" src="https://unpkg.com/message-map/dist/index.umd.js"></script>
 ```
 
 The API for the UMD build has one small difference: `MessageMap` is the default object with `MessageCollection` available on `MessageMap.Collection`. So, you would use...
