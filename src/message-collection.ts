@@ -53,7 +53,7 @@ export class MessageCollection<TCollection extends MessageCollectionDefinition =
   public messages: {
     [P in MessageCollectionKeys<Exclude<TCollection, void>>]?: MessageCollectionItemToMessageMap<
       Exclude<TCollection, void>[P]
-    >
+    >;
   };
 
   /**
@@ -83,7 +83,7 @@ export class MessageCollection<TCollection extends MessageCollectionDefinition =
 
     // Create a simple enum of collection keys mapped to their name.
     Object.keys(collection).forEach(key => {
-      this.keys[key] = key;
+      this.keys[key as keyof MessageCollectionKeyedEnum<Exclude<TCollection, void>>] = key as any;
     });
   }
 
@@ -107,14 +107,20 @@ export class MessageCollection<TCollection extends MessageCollectionDefinition =
       // Build required substitutions
       if (item.required) {
         for (const [k, config] of Object.entries(item.required)) {
-          mm = mm.required(k, createValidator(config, message => typeof message !== 'undefined' && message !== null));
+          mm = mm.required(
+            k,
+            createValidator(config, message => typeof message !== 'undefined' && message !== null),
+          );
         }
       }
 
       // Build optional substitutions
       if (item.optional) {
         for (const [k, config] of Object.entries(item.optional)) {
-          mm = mm.optional(k, createValidator(config, () => true));
+          mm = mm.optional(
+            k,
+            createValidator(config, () => true),
+          );
         }
       }
     }

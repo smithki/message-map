@@ -1,6 +1,6 @@
 // --- Imports -------------------------------------------------------------- //
 
-import { Expect, SetupFixture, SpyOn, Test, TestFixture } from 'alsatian';
+import { Expect, SetupFixture, Test, TestFixture } from 'alsatian';
 import { MessageCollection } from '../../src/message-collection';
 
 // -------------------------------------------------------------------------- //

@@ -34,7 +34,7 @@ jobs:
           key: *dependency-cache-key
       - run:
           name: Install App Dependencies
-          command: yarn install --frozen-lockfile
+          command: yarn install
       - save_cache:
           <<: *dependency-paths
           key: *dependency-cache-key

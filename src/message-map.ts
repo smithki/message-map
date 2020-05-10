@@ -1,6 +1,12 @@
 // --- Imports -------------------------------------------------------------- //
 
-import { GetSubstitutionKeys, OptionalSubstitution, RequiredSubstitution, Validator } from './types';
+import {
+  GetSubstitutionKeys,
+  OptionalSubstitution,
+  RequiredSubstitution,
+  Validator,
+  GetSubstitutionsArgument,
+} from './types';
 
 // --- MessageMap class ----------------------------------------------------- //
 
@@ -79,14 +85,10 @@ export class MessageMap<
    * @return The formed and validated string.
    */
   public toString<T extends TRequiredSubstitutions & TOptionalSubstitutions>(
-    ...substitutions: T extends RequiredSubstitution<any>
-      ? [(TRequiredSubstitutions & TOptionalSubstitutions)]
-      : GetSubstitutionKeys<TOptionalSubstitutions> extends never
-      ? [void]
-      : [(TRequiredSubstitutions & TOptionalSubstitutions) | void]
+    ...substitutions: GetSubstitutionsArgument<T, MessageMap<TRequiredSubstitutions, TOptionalSubstitutions>>
   ): string {
     let result = this.template;
-    const substitutionsQualified: any = !!substitutions.length ? substitutions[0] : {};
+    const substitutionsQualified: any = substitutions.length ? substitutions[0] : {};
 
     for (const [name, validator] of Object.entries(this.substitutions)) {
       const replacer = substitutionsQualified[name];

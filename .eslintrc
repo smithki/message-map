@@ -1,0 +1,22 @@
+{
+  "extends": ["@ikscodes/eslint-config"],
+  "parserOptions": {
+    "project": [
+      "./tsconfig.json",
+      "./test/tsconfig.json"
+    ]
+  },
+  "rules": {
+    "import/extensions": 0
+  },
+  "settings": {
+    "import/resolver": {
+      "typescript": {
+        "directory": [
+          "./tsconfig.json",
+          "./test/tsconfig.json"
+        ]
+      }
+    }
+  }
+}
