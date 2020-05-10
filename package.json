@@ -34,7 +34,7 @@
     "test": "npm-run-all -s clean:test-dist test:*",
     "test:compile": "tsc -p ./test",
     "test:run": "alsatian ./test/dist/**/*.spec.js",
-    "lint": "tslint --project ."
+    "lint": "eslint --fix src/**/*.ts"
   },
   "devDependencies": {
     "@ikscodes/eslint-config": "^6.2.0",
